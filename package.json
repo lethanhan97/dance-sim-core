@@ -4,6 +4,9 @@
   "description": "Dance Simulator to simulate various streetdance format and judging criteria",
   "main": "index.js",
   "license": "MIT",
+  "scripts": {
+    "dev": "nodemon index.ts"
+  },
   "devDependencies": {
     "nodemon": "^2.0.19",
     "ts-node": "^10.9.1",
