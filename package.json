@@ -1,0 +1,7 @@
+{
+  "name": "dance-sim-core",
+  "version": "1.0.0",
+  "description": "Dance Simulator to simulate various streetdance format and judging criteria",
+  "main": "index.js",
+  "license": "MIT"
+}
