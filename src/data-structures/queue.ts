@@ -3,7 +3,7 @@ import { BaseListNodeValue, ListNode } from './list-node';
 export class Queue<T extends BaseListNodeValue> {
   private head: ListNode<T> | null = null;
   private tail: ListNode<T> | null = null;
-  private length: number = 0;
+  private length = 0;
 
   // O(n)
   constructor(queueArray: T[]) {
@@ -69,7 +69,7 @@ export class Queue<T extends BaseListNodeValue> {
 
   // O(n)
   toString() {
-    let items = [];
+    const items = [];
 
     let cur = this.head;
 

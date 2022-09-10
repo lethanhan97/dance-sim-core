@@ -1,7 +1,7 @@
 import {
   SevenToSmoke,
   SevenToSmokeParticipant,
-} from './src/competition/seven-to-smoke';
+} from './competition/seven-to-smoke';
 
 const sevenToSmoke = new SevenToSmoke([
   new SevenToSmokeParticipant('WhyXce'),
