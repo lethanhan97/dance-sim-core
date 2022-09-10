@@ -16,6 +16,10 @@ class SevenToSmokeParticipant extends Dancer {
 }
 
 export class SevenToSmoke {
+  private static readonly TIME_LIMIT_IN_MINUTES = 30;
+  private static readonly MAX_POINTS = 7;
+  private static readonly PARTICIPANTS_REQUIRED = 8;
+
   private dancersQueue: Queue<SevenToSmokeParticipant>;
   private isCompleted: boolean;
   private winner: SevenToSmokeParticipant | null = null;
@@ -28,8 +32,10 @@ export class SevenToSmoke {
   }
 
   static validateConstructorParams(dancers: SevenToSmokeParticipant[]) {
-    if (dancers.length !== 8)
-      throw new Error('A Seven-to-Smoke can only have 8 dancers');
+    if (dancers.length !== SevenToSmoke.PARTICIPANTS_REQUIRED)
+      throw new Error(
+        `A Seven-to-Smoke can only have ${SevenToSmoke.PARTICIPANTS_REQUIRED} dancers`
+      );
   }
 
   start() {
@@ -45,7 +51,10 @@ export class SevenToSmoke {
 
     let round = 1;
 
-    while (maxPoints < 7 && timeElapsedInMinutes < 30) {
+    while (
+      maxPoints < SevenToSmoke.MAX_POINTS &&
+      timeElapsedInMinutes < SevenToSmoke.TIME_LIMIT_IN_MINUTES
+    ) {
       console.log(`================== ROUND ${round} ==================`);
       console.log(
         `Commence battle: ${defender?.toString()} vs ${challenger?.toString()}`
