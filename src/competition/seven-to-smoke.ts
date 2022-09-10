@@ -2,7 +2,50 @@ import { Queue } from '../data-structures/queue';
 import { Dancer } from '../participants/dancer';
 import { DanceBattle } from './dance-battle';
 
-class SevenToSmokeParticipant extends Dancer {
+class SevenToSmokeLogger {
+  static logCurrentRoundInfo({
+    round,
+    defender,
+    challenger,
+    dancersQueue,
+  }: {
+    round: number;
+    defender: SevenToSmokeParticipant;
+    challenger: SevenToSmokeParticipant;
+    dancersQueue: Queue<SevenToSmokeParticipant>;
+  }) {
+    console.log(`================== ROUND ${round} ==================`);
+    console.log(
+      `Commence battle: ${defender.toString()} vs ${challenger.toString()}`
+    );
+
+    console.log();
+    console.log('Dancers in the queue:');
+    console.log(dancersQueue.toString());
+  }
+
+  static logWinnerInfo({ winner }: { winner: SevenToSmokeParticipant }) {
+    console.log();
+    console.log(`Winner is: ${winner.toString()}`);
+    console.log('=============================================');
+    console.log();
+  }
+
+  static logSevenToSmokeInfo({ sevenToSmoke }: { sevenToSmoke: SevenToSmoke }) {
+    console.log(`====== SEVEN TO SMOKE ======`);
+    console.log(`Battlers: ${sevenToSmoke.getDancersQueue().toString()}`);
+    console.log(`Battle have finished: ${sevenToSmoke.getIsCompleted()}`);
+    console.log(
+      `${
+        !!sevenToSmoke.getWinner()
+          ? `The winner is: ${sevenToSmoke.getWinner()!.toString()}`
+          : ''
+      }`
+    );
+  }
+}
+
+export class SevenToSmokeParticipant extends Dancer {
   points: number;
 
   constructor(name: string) {
@@ -38,6 +81,18 @@ export class SevenToSmoke {
       );
   }
 
+  getWinner() {
+    return this.winner;
+  }
+
+  getIsCompleted() {
+    return this.isCompleted;
+  }
+
+  getDancersQueue() {
+    return this.dancersQueue;
+  }
+
   start() {
     let maxPoints = 0;
     let overalWinner: SevenToSmokeParticipant | null = null;
@@ -55,18 +110,19 @@ export class SevenToSmoke {
       maxPoints < SevenToSmoke.MAX_POINTS &&
       timeElapsedInMinutes < SevenToSmoke.TIME_LIMIT_IN_MINUTES
     ) {
-      console.log(`================== ROUND ${round} ==================`);
-      console.log(
-        `Commence battle: ${defender?.toString()} vs ${challenger?.toString()}`
-      );
-
-      console.log();
-      console.log('Dancers in the queue:');
-      console.log(this.dancersQueue.toString());
-
+      SevenToSmokeLogger.logCurrentRoundInfo({
+        round,
+        defender,
+        challenger,
+        dancersQueue: this.dancersQueue,
+      });
       const [winner, loser] = DanceBattle.battle(defender, challenger);
-
       winner.points++;
+
+      SevenToSmokeLogger.logWinnerInfo({
+        winner,
+      });
+
       defender = winner;
       /**
        * Typecasting since dancersQueue will always have minimally 6 dancers
@@ -81,11 +137,6 @@ export class SevenToSmoke {
 
       round++;
       timeElapsedInMinutes += DanceBattle.TIME_ELAPSED_PER_BATTLE_IN_MINUTES;
-
-      console.log();
-      console.log(`Winner is: ${winner.toString()}`);
-      console.log('=============================================');
-      console.log();
     }
 
     this.isCompleted = true;
@@ -93,11 +144,6 @@ export class SevenToSmoke {
   }
 
   toString() {
-    console.log(`====== SEVEN TO SMOKE ======`);
-    console.log(`Battlers: ${this.dancersQueue.toString()}`);
-    console.log(`Battle have finished: ${this.isCompleted}`);
-    console.log(
-      `${!!this.winner ? `The winner is: ${this.winner.toString()}` : ''}`
-    );
+    SevenToSmokeLogger.logSevenToSmokeInfo({ sevenToSmoke: this });
   }
 }
