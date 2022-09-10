@@ -21,9 +21,15 @@ export class SevenToSmoke {
   private winner: SevenToSmokeParticipant | null = null;
 
   constructor(dancers: SevenToSmokeParticipant[]) {
-    // TODO Add validation to make sure only 8 dancers
+    SevenToSmoke.validateConstructorParams(dancers);
+
     this.dancersQueue = new Queue(dancers);
     this.isCompleted = false;
+  }
+
+  static validateConstructorParams(dancers: SevenToSmokeParticipant[]) {
+    if (dancers.length !== 8)
+      throw new Error('A Seven-to-Smoke can only have 8 dancers');
   }
 
   start() {
