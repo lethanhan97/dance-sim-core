@@ -7,3 +7,4 @@ Library to simulate Dance Battles and Various Dance Tournament formats
 - [ ] Add judging logic
 - [ ] Write tests
 - [ ] Populate README
+- [ ] Make it a library
