@@ -58,27 +58,29 @@ export class SevenToSmokeParticipant extends Dancer {
   }
 }
 
+// A Seven-to-Smoke can only have 8 participants
+type SevenToSmokeDancersConstructorParam = [
+  SevenToSmokeParticipant,
+  SevenToSmokeParticipant,
+  SevenToSmokeParticipant,
+  SevenToSmokeParticipant,
+  SevenToSmokeParticipant,
+  SevenToSmokeParticipant,
+  SevenToSmokeParticipant,
+  SevenToSmokeParticipant
+];
+
 export class SevenToSmoke {
   private static readonly TIME_LIMIT_IN_MINUTES = 30;
   private static readonly MAX_POINTS = 7;
-  private static readonly PARTICIPANTS_REQUIRED = 8;
 
   private dancersQueue: Queue<SevenToSmokeParticipant>;
   private isCompleted: boolean;
   private winner: SevenToSmokeParticipant | null = null;
 
-  constructor(dancers: SevenToSmokeParticipant[]) {
-    SevenToSmoke.validateConstructorParams(dancers);
-
+  constructor(dancers: SevenToSmokeDancersConstructorParam) {
     this.dancersQueue = new Queue(dancers);
     this.isCompleted = false;
-  }
-
-  static validateConstructorParams(dancers: SevenToSmokeParticipant[]) {
-    if (dancers.length !== SevenToSmoke.PARTICIPANTS_REQUIRED)
-      throw new Error(
-        `A Seven-to-Smoke can only have ${SevenToSmoke.PARTICIPANTS_REQUIRED} dancers`
-      );
   }
 
   getWinner() {
