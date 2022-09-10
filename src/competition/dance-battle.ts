@@ -3,7 +3,6 @@ import { Dancer } from '../participants/dancer';
 export class DanceBattle {
   static TIME_ELAPSED_PER_BATTLE_IN_MINUTES = 2;
 
-  // returns [winner, loser]
   static battle<T extends Dancer>(dancer1: T, dancer2: T) {
     const randomNumber = Math.random();
 

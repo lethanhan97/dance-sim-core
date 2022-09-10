@@ -38,7 +38,9 @@ class SevenToSmokeLogger {
     console.log(
       `${
         !!sevenToSmoke.getWinner()
-          ? `The winner is: ${sevenToSmoke.getWinner()!.toString()}`
+          ? // Disable since line check above ensures that there is a winner already
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            `The winner is: ${sevenToSmoke.getWinner()!.toString()}`
           : ''
       }`
     );

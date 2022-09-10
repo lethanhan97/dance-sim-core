@@ -42,6 +42,7 @@ export class Queue<T extends BaseListNodeValue> {
        * For a queue, if head is null taill will definitely be null
        * Thus, we can assume by passing the above check, tail won't be null
        *  */
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       this.tail!.next = listNode;
       this.tail = listNode;
       this.length++;
