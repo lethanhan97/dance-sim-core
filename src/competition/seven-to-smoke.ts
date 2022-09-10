@@ -2,12 +2,25 @@ import { Queue } from '../data-structures/queue';
 import { Dancer } from '../participants/dancer';
 import { DanceBattle } from './dance-battle';
 
-export class SevenToSmoke {
-  private dancersQueue: Queue<Dancer>;
-  private isCompleted: boolean;
-  private winner: Dancer | null = null;
+class SevenToSmokeParticipant extends Dancer {
+  points: number;
 
-  constructor(dancers: Dancer[]) {
+  constructor(name: string) {
+    super(name);
+    this.points = 0;
+  }
+
+  toString() {
+    return `${this.name}: ${this.points}`;
+  }
+}
+
+export class SevenToSmoke {
+  private dancersQueue: Queue<SevenToSmokeParticipant>;
+  private isCompleted: boolean;
+  private winner: SevenToSmokeParticipant | null = null;
+
+  constructor(dancers: SevenToSmokeParticipant[]) {
     // TODO Add validation to make sure only 8 dancers
     this.dancersQueue = new Queue(dancers);
     this.isCompleted = false;
@@ -15,14 +28,14 @@ export class SevenToSmoke {
 
   start() {
     let maxPoints = 0;
-    let overalWinner: Dancer | null = null;
+    let overalWinner: SevenToSmokeParticipant | null = null;
     let timeElapsedInMinutes = 0;
 
     /**
      * Typecasting since dancersQueue will always have minimally 6 dancers
      */
-    let defender = this.dancersQueue.dequeue() as Dancer;
-    let challenger = this.dancersQueue.dequeue() as Dancer;
+    let defender = this.dancersQueue.dequeue() as SevenToSmokeParticipant;
+    let challenger = this.dancersQueue.dequeue() as SevenToSmokeParticipant;
 
     let round = 1;
 
@@ -43,7 +56,7 @@ export class SevenToSmoke {
       /**
        * Typecasting since dancersQueue will always have minimally 6 dancers
        */
-      challenger = this.dancersQueue.dequeue() as Dancer;
+      challenger = this.dancersQueue.dequeue() as SevenToSmokeParticipant;
       this.dancersQueue.enqueue(loser);
 
       if (winner.points > maxPoints) {
@@ -52,7 +65,7 @@ export class SevenToSmoke {
       }
 
       round++;
-      timeElapsedInMinutes += DanceBattle.TIME_ELAPSED_PER_BATTLE;
+      timeElapsedInMinutes += DanceBattle.TIME_ELAPSED_PER_BATTLE_IN_MINUTES;
 
       console.log();
       console.log(`Winner is: ${winner.toString()}`);
