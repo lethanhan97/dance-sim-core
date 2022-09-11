@@ -25,9 +25,19 @@ class SevenToSmokeLogger {
     console.log(dancersQueue.toString());
   }
 
-  static logWinnerInfo({ winner }: { winner: SevenToSmokeParticipant }) {
+  static logPostBattleInfo({
+    isTie,
+    winner,
+  }: {
+    isTie: boolean;
+    winner: SevenToSmokeParticipant | null;
+  }) {
     console.log();
-    console.log(`Winner is: ${winner.toString()}`);
+    if (isTie) {
+      console.log("It's a tie! Both dancers go back in the queue!");
+    } else {
+      console.log(`Winner is: ${winner?.toString()}`);
+    }
     console.log('=============================================');
     console.log();
   }
@@ -39,9 +49,7 @@ class SevenToSmokeLogger {
     console.log(
       `${
         !!sevenToSmoke.getWinner()
-          ? // Disable since line check above ensures that there is a winner already
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            `The winner is: ${sevenToSmoke.getWinner()!.toString()}`
+          ? `The winner is: ${sevenToSmoke.getWinner()?.toString()}`
           : ''
       }`
     );
@@ -129,26 +137,40 @@ export class SevenToSmoke {
         challenger,
         dancersQueue: this.dancersQueue,
       });
-      const [winner, loser] = DanceBattle.battle({
+      const { isTie, winner, loser } = DanceBattle.battle({
         dancers: [defender, challenger],
         judge: this.judge,
       });
-      winner.points++;
 
-      SevenToSmokeLogger.logWinnerInfo({
+      if (winner) winner.points++;
+
+      SevenToSmokeLogger.logPostBattleInfo({
+        isTie,
         winner,
       });
 
-      defender = winner;
-      /**
-       * Typecasting since dancersQueue will always have minimally 6 dancers
-       */
-      challenger = this.dancersQueue.dequeue() as SevenToSmokeParticipant;
-      this.dancersQueue.enqueue(loser);
+      if (!isTie) {
+        defender = winner;
 
-      if (winner.points > maxPoints) {
-        overalWinner = winner;
-        maxPoints = winner.points;
+        /**
+         * Typecasting since dancersQueue will always have minimally 6 dancers
+         */
+        challenger = this.dancersQueue.dequeue() as SevenToSmokeParticipant;
+        this.dancersQueue.enqueue(loser);
+
+        if (winner.points > maxPoints) {
+          overalWinner = winner;
+          maxPoints = winner.points;
+        }
+      } else {
+        this.dancersQueue.enqueue(defender);
+        this.dancersQueue.enqueue(challenger);
+
+        /**
+         * Typecasting since dancersQueue will always have minimally 6 dancers
+         */
+        defender = this.dancersQueue.dequeue() as SevenToSmokeParticipant;
+        challenger = this.dancersQueue.dequeue() as SevenToSmokeParticipant;
       }
 
       round++;

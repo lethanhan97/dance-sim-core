@@ -8,13 +8,39 @@ export class Judge {
 
   // TODO: Change to take in round stats instead
   // TODO: Add handling for tie
-  judge<T extends Dancer>(dancer1: T, dancer2: T) {
+  judge<T extends Dancer>(
+    dancer1: T,
+    dancer2: T
+  ):
+    | {
+        isTie: true;
+        winner: null;
+        loser: null;
+      }
+    | {
+        isTie: false;
+        winner: T;
+        loser: T;
+      } {
     // TODO: Update logic
     const randomNumber = Math.random();
 
-    const winner = randomNumber > 0.5 ? dancer1 : dancer2;
-    const loser = randomNumber <= 0.5 ? dancer1 : dancer2;
+    const isTie = randomNumber === 0.5;
 
-    return [winner, loser];
+    if (isTie) {
+      return {
+        isTie,
+        winner: null,
+        loser: null,
+      };
+    }
+    const winner = randomNumber > 0.5 ? dancer1 : dancer2;
+    const loser = randomNumber < 0.5 ? dancer1 : dancer2;
+
+    return {
+      isTie,
+      winner,
+      loser,
+    };
   }
 }
