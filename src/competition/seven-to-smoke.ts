@@ -1,5 +1,6 @@
 import { Queue } from '../data-structures/queue';
 import { Dancer } from '../participants/dancer';
+import { Judge } from '../participants/judge';
 import { DanceBattle } from './dance-battle';
 
 class SevenToSmokeLogger {
@@ -79,10 +80,18 @@ export class SevenToSmoke {
   private dancersQueue: Queue<SevenToSmokeParticipant>;
   private isCompleted: boolean;
   private winner: SevenToSmokeParticipant | null = null;
+  private judge: Judge;
 
-  constructor(dancers: SevenToSmokeDancersConstructorParam) {
+  constructor({
+    dancers,
+    judge,
+  }: {
+    dancers: SevenToSmokeDancersConstructorParam;
+    judge: Judge;
+  }) {
     this.dancersQueue = new Queue(dancers);
     this.isCompleted = false;
+    this.judge = judge;
   }
 
   getWinner() {
@@ -120,7 +129,10 @@ export class SevenToSmoke {
         challenger,
         dancersQueue: this.dancersQueue,
       });
-      const [winner, loser] = DanceBattle.battle(defender, challenger);
+      const [winner, loser] = DanceBattle.battle({
+        dancers: [defender, challenger],
+        judge: this.judge,
+      });
       winner.points++;
 
       SevenToSmokeLogger.logWinnerInfo({

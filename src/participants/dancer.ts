@@ -5,6 +5,10 @@ export class Dancer {
     this.name = name;
   }
 
+  dance() {
+    // TODO: update to return round stats
+  }
+
   toString() {
     return `${this.name}`;
   }
