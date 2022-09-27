@@ -1,6 +1,7 @@
 import { getConditionMultiplier } from '../utils/seed';
 
 type DancerStats = Record<string, number>;
+export type DanceRoundStats = Record<string, number>;
 
 export class Dancer {
   name: string;
@@ -15,7 +16,7 @@ export class Dancer {
     };
   }
 
-  dance() {
+  dance(): DanceRoundStats {
     const conditionMultiplier = getConditionMultiplier();
     return Object.keys(this.stats).reduce((aggregator, key) => {
       aggregator[key] = conditionMultiplier * this.stats[key];

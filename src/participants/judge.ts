@@ -1,46 +1,28 @@
-import { Dancer } from './dancer';
+import { DanceRoundStats } from './dancer';
 
+type IndividualRoundResult = number;
 export class Judge {
   name: string;
+  judgingPreference: Record<string, number>;
+
+  static BASE_MULTIPLIER = 0;
+
   constructor(name: string) {
     this.name = name;
+
+    // TODO: Get this from constructor instead
+    this.judgingPreference = {
+      musicality: 0.6,
+      foundation: 0.4,
+    };
   }
 
-  // TODO: Change to take in round stats instead
-  // TODO: Add handling for tie
-  judge<T extends Dancer>(
-    dancer1: T,
-    dancer2: T
-  ):
-    | {
-        isTie: true;
-        winner: null;
-        loser: null;
-      }
-    | {
-        isTie: false;
-        winner: T;
-        loser: T;
-      } {
-    // TODO: Update logic
-    const randomNumber = Math.random();
+  judge(danceRound: DanceRoundStats): IndividualRoundResult {
+    return Object.keys(danceRound).reduce((result, key) => {
+      const judgeMultiplier =
+        this.judgingPreference[key] || Judge.BASE_MULTIPLIER;
 
-    const isTie = randomNumber === 0.5;
-
-    if (isTie) {
-      return {
-        isTie,
-        winner: null,
-        loser: null,
-      };
-    }
-    const winner = randomNumber > 0.5 ? dancer1 : dancer2;
-    const loser = randomNumber < 0.5 ? dancer1 : dancer2;
-
-    return {
-      isTie,
-      winner,
-      loser,
-    };
+      return result + judgeMultiplier * danceRound[key];
+    }, 0);
   }
 }

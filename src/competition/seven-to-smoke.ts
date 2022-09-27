@@ -177,6 +177,9 @@ export class SevenToSmoke {
       timeElapsedInMinutes += DanceBattle.TIME_ELAPSED_PER_BATTLE_IN_MINUTES;
     }
 
+    if (challenger) this.dancersQueue.enqueue(challenger);
+    if (defender) this.dancersQueue.enqueue(defender);
+
     this.isCompleted = true;
     this.winner = overalWinner;
   }
