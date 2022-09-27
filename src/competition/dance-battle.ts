@@ -15,6 +15,7 @@ type DanceBattleResult<T extends Dancer> =
 
 export class DanceBattle {
   static TIME_ELAPSED_PER_BATTLE_IN_MINUTES = 2.5;
+  static TIE_THRESHOLD = 1;
 
   static battle<T extends Dancer>({
     dancers,
@@ -23,14 +24,15 @@ export class DanceBattle {
     dancers: [T, T];
     judge: Judge;
   }): DanceBattleResult<T> {
-    // TODO: Get each dancer's round stats and pass in to judge
     const firstDancerRoundStat = dancers[0].dance();
     const secondDancerRoundStat = dancers[1].dance();
 
     const firstDancerRoundResult = judge.judge(firstDancerRoundStat);
     const secondDancerRoundResult = judge.judge(secondDancerRoundStat);
 
-    if (firstDancerRoundResult === secondDancerRoundResult) {
+    if (
+      DanceBattle.isTieRound(firstDancerRoundResult, secondDancerRoundResult)
+    ) {
       return {
         isTie: true,
         winner: null,
@@ -49,5 +51,15 @@ export class DanceBattle {
           ? dancers[1]
           : dancers[0],
     };
+  }
+
+  private static isTieRound(
+    firstDancerRoundResult: number,
+    secondDancerRoundResult: number
+  ) {
+    return (
+      Math.abs(firstDancerRoundResult - secondDancerRoundResult) <
+      DanceBattle.TIE_THRESHOLD
+    );
   }
 }
